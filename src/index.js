@@ -1,21 +1,18 @@
 function playSound(e) {
   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
   if(!audio) return;
-
-  resetTransition();
-
   audio.currentTime = 0;
   audio.play();
-  document.querySelector(`div[data-key="${e.keyCode}"]`).classList.add("playing");
-  console.log(audio);
+  key.classList.add("playing");
 }
 
-function resetTransition() {
-  const keys = document.querySelectorAll(".key");
-  keys.forEach((key) => {
-    key.classList.remove("playing");
-  });
+function resetTransition(e) {
+  if(e.propertyName != "transform") return;
+  this.classList.remove("playing");
 }
 
-  
+const keys = document.querySelectorAll(".key");
+keys.forEach((key) => key.addEventListener("transitionend", resetTransition));
+
 window.addEventListener('keydown', playSound);
